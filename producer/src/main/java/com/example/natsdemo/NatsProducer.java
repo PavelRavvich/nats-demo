@@ -1,6 +1,9 @@
 package com.example.natsdemo;
 
-import io.nats.client.*;
+import io.nats.client.Connection;
+import io.nats.client.JetStream;
+import io.nats.client.JetStreamManagement;
+import io.nats.client.Nats;
 import io.nats.client.api.PublishAck;
 import io.nats.client.api.StorageType;
 import io.nats.client.api.StreamConfiguration;
@@ -12,10 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 @Service
 public class NatsProducer {
@@ -35,6 +37,13 @@ public class NatsProducer {
     void push(@NotNull String sub, @NotNull String msg) {
         String message = String.format("%s %s", msg, inc.incrementAndGet());
         connection.publish(sub, message.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @SneakyThrows
+    void pushAsync(@NotNull String sub, @NotNull String msg) {
+        JetStream stream = connection.jetStream();
+        String message = String.format("%s %s", msg, inc.incrementAndGet());
+        CompletableFuture<PublishAck> future = stream.publishAsync(sub, message.getBytes(StandardCharsets.UTF_8));
     }
 
     @PreDestroy

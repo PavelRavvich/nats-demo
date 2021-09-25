@@ -22,8 +22,7 @@ public class NatsController {
     @GetMapping("/connect")
     public void connect() {
         natsProducer.openConnection();
-//        natsProducer.openStream("some-name", "com.demosub");
-        natsProducer.push("com.tradeshare", "test");
+        natsProducer.pushAsync("com.tradeshare", "test");
     }
 
     @ResponseStatus(value = HttpStatus.OK)
