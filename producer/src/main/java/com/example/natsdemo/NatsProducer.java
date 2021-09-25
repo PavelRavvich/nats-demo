@@ -42,9 +42,15 @@ public class NatsProducer {
     @SneakyThrows
     void pushAsync(@NotNull String sub, @NotNull String msg) {
         JetStream stream = connection.jetStream();
+
         String message = String.format("%s %s", msg, inc.incrementAndGet());
         CompletableFuture<PublishAck> future = stream
                 .publishAsync(sub, message.getBytes(StandardCharsets.UTF_8));
+
+        future.thenApplyAsync(ack -> {
+            System.out.println(ack);
+            return ack;
+        });
     }
 
     @PreDestroy
