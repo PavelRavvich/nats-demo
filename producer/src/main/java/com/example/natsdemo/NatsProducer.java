@@ -1,9 +1,6 @@
 package com.example.natsdemo;
 
-import io.nats.client.Connection;
-import io.nats.client.JetStream;
-import io.nats.client.JetStreamManagement;
-import io.nats.client.Nats;
+import io.nats.client.*;
 import io.nats.client.api.PublishAck;
 import io.nats.client.api.StorageType;
 import io.nats.client.api.StreamConfiguration;
@@ -24,12 +21,18 @@ public class NatsProducer {
 
     private Connection connection;
 
-    private AtomicInteger inc = new AtomicInteger(0);
+    private final AtomicInteger inc = new AtomicInteger(0);
 
     @SneakyThrows
     public void openConnection() {
+        String url = "nats://localhost:4222";
         if (Objects.isNull(connection)) {
-            connection = Nats.connect();
+            Options options = new Options.Builder()
+                    .server(url)
+                    .connectionListener((conn, type) -> {
+                                System.out.println(type);
+                            }).build();
+            connection = Nats.connect(options);
         }
     }
 

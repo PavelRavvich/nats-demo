@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 @Service
 public class NatsConsumer {
+
     private Connection connection;
 
     @PostConstruct
