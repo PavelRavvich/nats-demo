@@ -18,7 +18,7 @@ public class NatsController {
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/connect/{topic}")
     public void connect(@PathVariable(name = "topic") String topic) {
-
+//        https://itnext.io/secure-pub-sub-with-nats-fcda983d0612    SECURITY CONNECTION
         natsProducer.openConnection();
 //        String msg = "{\"p\":[{\"s\":\"1000SHIBUSDT\",\"l\":0.3,\"m\":\"BINANCE_FUTURES\"}]}";
         String msg = "{\"p\":[]}";
