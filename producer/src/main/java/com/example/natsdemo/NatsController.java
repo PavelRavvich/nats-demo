@@ -20,7 +20,8 @@ public class NatsController {
     public void connect(@PathVariable(name = "topic") String topic) {
 
         natsProducer.openConnection();
-        String msg = "{\"p\":[{\"s\":\"1000SHIBUSDT\",\"l\":0.251868,\"m\":\"BINANCE_FUTURES\"}]}";
+//        String msg = "{\"p\":[{\"s\":\"1000SHIBUSDT\",\"l\":0.3,\"m\":\"BINANCE_FUTURES\"}]}";
+        String msg = "{\"p\":[]}";
         natsProducer.pushAsync(topic, msg);
     }
 
